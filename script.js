@@ -6,19 +6,21 @@ const choiceAlpha = document.getElementById ('label0')
 const choiceBravo = document.getElementById ('label1')
 const choiceCharlie = document.getElementById ('label2')
 const choiceDelta = document.getElementById ('label3')
+const yourScore = document.getElementById ('yourScore')
+const rules = document.getElementById ('rules')
 
 var timeEl = document.querySelector(".time");
 
 var secondsLeft = 300;
+var timerInterval 
 
 function setTime() {
-  var timerInterval = setInterval(function() {
+timerInterval = setInterval(function() {
     secondsLeft--;
     timeEl.textContent = secondsLeft;
 
     if(secondsLeft === 0) {
       clearInterval(timerInterval);
-      sendMessage();
     }
 
   }, 1000);
@@ -30,9 +32,11 @@ submitBtn.addEventListener('click', submit);
 function start (){
 console.log(start)
 startBtn.classList.add('hide');
+rules.classList.add('hide');
 quizContainer.classList.remove('hide')
 submitBtn.classList.remove('hide')
 createQuestion(currentNumber);
+setTime()
 }
 
 var score = 0;
@@ -47,169 +51,61 @@ function createQuestion (a){
 }
 
 function submit(){
-    currentNumber++
-    createQuestion(currentNumber)
     const rbs = document.querySelectorAll('input[name="choice"]')
     let selectedValue;
         for (const rb of rbs) {
             if (rb.checked) {
                 selectedValue = rb.value;
+                selectedValue = parseInt(selectedValue);
+                console.log(selectedValue)
                 break;
             }
         }
+    checkAnswer(selectedValue, currentNumber);
+    if (allQuestions.length-1 === currentNumber){
+        showResults()
+    }
+    else {
+    currentNumber++
+    createQuestion(currentNumber)}
+}
+
+function checkAnswer(selectedValue, questionNumber){
+    console.log(checkAnswer)
+    if (allQuestions[questionNumber].correctAnswer === selectedValue){
+    }
+    else {
+        console.log('wrong')
+        secondsLeft = secondsLeft - 50
+    }
+}
+
+function showResults(){
+    quizContainer.classList.add('hide')
+    submitBtn.classList.add('hide')
+    yourScore.classList.remove('hide')
+    clearInterval(timerInterval)
 }
 
 var allQuestions = 
     [
-        {question: "Q1: What is your name?",
-                    choices: ["Steve", "kevin", "peter", "jimmy"],
+        {question: "Q1: What is another alternate name for the hashtag/pound key?",
+                    choices: ["Octothrope", "Pentathrope", "Hexathrope", "None of the above"],
                     correctAnswer:0},
         
-        {question: "Q2: What is the capital of United States?",
-                    choices: ["California", "New York", "Miami", "Florida"],
-                    correctAnswer:0},
+        {question: "Q2: What are baby porcupines called?",
+                    choices: ["Porcupines", "Porcies", "Porcupettes", "Cupines"],
+                    correctAnswer:2},
 
         {question: "Q3: How many years can a snail sleep without eating?",
-                    choices: ["California", "New York", "Miami", "Florida"],
-                    correctAnswer:0}
+                    choices: ["1", "2", "3", "4"],
+                    correctAnswer:2},
+        
+        {question: "Q4: What was the orignal use of bubble wrap?",
+                    choices: ["Vehicle Crash Safety", "3D Wallpaper", "Packaging", "Bed comforters"],
+                    correctAnswer:1},
+
+        {question: "Q5: On average, how many hot dogs do Americans consume on the 4th of July?",
+                    choices: ["500 million", "50 million", "100 million", "150 million"],
+                    correctAnswer:3},
     ]
-
-
-setTime();
-
-// function showScore(){
-//     document.forms.radioAnswers.style.display="none";
-//     var question=document.getElementById("question");
-//     question.style.display = "none";
-//     var elt=document.getElementById("point");
-//     elt.style.display = "block"; 
-//     var button = document.getElementById("next");
-//     button.style.display="none";   
-
-// }
-
-
-
-// var container = document.getElementById('container');
-//       for (var i = 0; i < questions.length; i++) {
-//           var questionContainer = document.createElement('DIV');
-//           questionContainer.textContent = questions[i].question;
-
-//           var options = questions[i].choices;
-//           for (var opt in options) {
-//               //create radiobutton
-//               //append radiobutton to a div 
-//           }
-//           container.appendChild(questionContainer);
-//       }
-        
-        
-
-
-
-
-
-
-
-// Prior Code Reference 
-
-// const quizContainer = document.getElementById ('quiz')
-// const startQuizButton = document.getElementById ('start-btn')
-// const questionChoicesContainer = document.getElementById ('answerChoices')
-// const submitAnswerButton = document.getElementById ('submitAnswer')
-// const questionElement = document.getElementById ('quizQuestions')
-// const answerElement = document.getElementById ('answerChoices')
-// const answerButtonsElement = document.getElementById ('answer-btn')
-
-
-// let shuffledQuestions, currentQuestionIndex
-
-// startQuizButton.addEventListener('click', beginGame)
-
-// function beginGame(){
-//     startQuizButton.classList.add('hideTransition');
-//     shuffledQuestions = questions.sort(() => math.random() - .5)
-//     currentQuestionIndex = 0
-//     quizContainer.classList.remove('hideTransition');
-//     submitAnswerButton.classList.remove('hideTransition');
-//     submitAnswer();
-// }
-
-// function submitAnswer(){
-//     resetState()
-//     showQuestion(shuffledQuestions[currentQuestionIndex]);
-// }
-
-// function showQuestion(question){
-//     questionElement.innerText = question.question;
-//     question.answers.forEach(answer => {
-//         const button = document.createElement('button')
-//         button.innerText = answer.text
-//         button.classList.add('answer-btn')
-//         if (answer.correct) {
-//           button.dataset.correct = answer.correct
-//         }
-//         button.addEventListener('click', selectAnswer)
-//         answerButtonsElement.appendChild(button)
-//       })
-// }
-
-// function resetState() {
-//     clearStatusClass(document.body);
-//     nextButton.classList.add('hide');
-//     while (answerButtonsElement.firstChild){
-//         answerButtonsElement.removeChild(answerButtonsElement.firstChild)
-//         }
-// }
-
-// function selectAnswer(e) {
-//     const selectedButton = e.target
-//     const correct = selectedButton.dataset.correct
-//     setStatusClass(document.body, correct)
-//     Array.from(answerButtonsElement.children).forEach(button => {
-//       setStatusClass(button, button.dataset.correct)
-//     })
-// }
-  
-//   function setStatusClass(element, correct) {
-//     clearStatusClass(element)
-//     if (correct) {
-//       element.classList.add('correct')
-//     } else {
-//       element.classList.add('wrong')
-//     }
-// }
-  
-//   function clearStatusClass(element) {
-//     element.classList.remove('correct')
-//     element.classList.remove('wrong')
-// }
-
-// const questions = [
-//     {
-//       question: 'What is the strongest muscle in proportion to its size in the human body?',
-//       answer1: 'Tongue',
-//       answer2: 'Hamstrings',
-//     },
-// ]
-//     {    
-//       question: "How many years can a snail sleep without eating?",
-//       answers: {
-//         a: "1",
-//         b: "2",
-//         c: "3",
-//         d: "4",
-//       },
-//       correctAnswer: "c"
-//     },
-//     {
-//       question: "Finish the proverb 'great minds think alike __.' Hint* Base off British English",
-//       answers: {
-//         a: ",wisdom comes in twos",
-//         b: "and greater actions unify",
-//         c: ",fools seldom differ",
-//         d: ",but success is only for one"
-//       },
-//       correctAnswer: "c"
-//     }
-//   ]
